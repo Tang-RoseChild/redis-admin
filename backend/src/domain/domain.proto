@@ -1,0 +1,94 @@
+syntax="proto3";
+
+message RedisKey {
+    string name = 1;
+    string type = 2;
+    repeated Value values = 3;
+
+    message Value {
+        string field = 1;
+        string score = 2;
+    }
+}
+
+
+message RedisCmd {
+    string cmd = 1;
+    string key = 2;
+    repeated Any args = 3;
+}
+
+
+message Node {
+    RedisKey key = 1;
+    repeated Node children = 2;
+    Node parent = 3 [depretch = true]; // js use this for adding elements dynamicly
+    string display_name = 4;
+}
+
+
+message GetAllKeysReq {}
+message GetAllKeysResp {
+    repeated Node nodes = 1;
+}
+
+message ExecReq {
+    RedisCmd req = 1;
+}
+
+message ExecResp {
+    repeated Node nodes = 1;
+    string info = 2;
+}
+
+message DelReq {
+    string type = 1;
+    string key = 2;
+    Any field = 3;
+}
+
+message DelResp {}
+
+message ModifyReq {
+    Ope ope = 1;
+    enum Ope {
+        UNKNOWN = 0;
+        RENAME_FIELD = 1;
+        MODIFY_VALUE = 2;
+    }
+    string type = 2;
+    string key = 3;
+    Any field = 4;
+    Any old_field = 5;
+    Any old_value = 6;
+    Any value = 7;
+}
+
+service ServerService {
+    rpc GetAllKeys(GetAllKeysReq) returns (GetAllKeysResp);
+    rpc ExecCmd(ExecReq) returns (ExecResp);
+    rpc Del(DelReq) returns (DelResp);
+}
+
+
+message RedisConfig {
+    string url = 1;
+    uint32 db = 2;
+    uint32 timeout = 3;
+    repeated string separator = 4;
+    string password = 5;
+}
+
+message RedisConfigModifyReq {
+    RedisConfig req = 1;
+}
+message RedisConfigModifyResp {}
+
+message GetConfigReq {}
+message GetConfigResp {
+    RedisConfig resp = 1;
+}
+service ConfigService {
+    rpc Modify(RedisConfigModifyReq) return (RedisConfigModifyResp);
+    rpc GetConfig(GetConfigReq) return (GetAllKeysResp);
+}
