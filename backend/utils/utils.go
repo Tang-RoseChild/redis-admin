@@ -15,3 +15,11 @@ func ToInterfaceSlice(src []string) []interface{} {
 
 	return dst
 }
+
+func PInt(i int) *int {
+	return &i
+}
+
+func PString(str string) *string {
+	return &str
+}

@@ -3,7 +3,7 @@ package domain
 import (
 	"testing"
 
-	"redis_backend/utils/uredis"
+	"github.com/Tang-RoseChild/redis-admin/backend/utils/uredis"
 
 	"github.com/stretchr/testify/assert"
 	redis "gopkg.in/redis.v5"

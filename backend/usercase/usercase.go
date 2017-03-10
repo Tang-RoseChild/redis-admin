@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"redis_backend/domain"
-	"redis_backend/impl"
-	"redis_backend/utils"
 	"strings"
+
+	"github.com/Tang-RoseChild/redis-admin/backend/domain"
+	"github.com/Tang-RoseChild/redis-admin/backend/impl"
+	"github.com/Tang-RoseChild/redis-admin/backend/utils"
 )
 
 type hanlder struct{}
@@ -26,18 +28,12 @@ func (h *hanlder) GetAllKeys(w http.ResponseWriter, r *http.Request) {
 
 func (h *hanlder) ExecCmd(w http.ResponseWriter, r *http.Request) {
 	var req domain.RedisCmd
-	reqData, err := ioutil.ReadAll(r.Body)
-	if err == nil {
-		err = json.Unmarshal(reqData, &req)
-	}
-	if err != nil {
-		panic(err)
-	}
-
+	unmarshalReq(r, &req)
+	log.Println("ExecCmd req > ", req)
 	root, info := impl.Impl.ExecCmd(&req)
 	resp := struct {
-		Nodes []*domain.Node
-		Info  interface{}
+		Nodes []*domain.Node `json:"nodes"`
+		Info  interface{}    `json:"info"`
 	}{Info: info}
 
 	if root != nil {
@@ -56,7 +52,7 @@ func (h *hanlder) Config(w http.ResponseWriter, r *http.Request) {
 	case "post":
 		var config domain.RedisConfig
 		unmarshalReq(r, &config)
-		impl.Impl.Modify(config)
+		impl.Impl.Modify(&config)
 	}
 }
 
@@ -95,7 +91,6 @@ type modifyReq struct {
 func (h *hanlder) Modify(w http.ResponseWriter, r *http.Request) {
 	var req modifyReq
 	unmarshalReq(r, &req)
-	fmt.Printf("req >> %#v\n", req)
 	var err error
 	switch req.Ope {
 	case RENAME_FIELD:
@@ -104,9 +99,6 @@ func (h *hanlder) Modify(w http.ResponseWriter, r *http.Request) {
 		err = impl.Impl.ModifyValue(req.Type, req.Key, req.Field, req.OldValue, req.Value)
 	}
 
-	if err != nil {
-		fmt.Println("err in modify > ", err)
-	}
 	marshal(w, map[string]interface{}{"error": err})
 }
 

@@ -2,8 +2,9 @@ package domain
 
 import (
 	"fmt"
-	"redis_backend/utils/uredis"
 	"strings"
+
+	"github.com/Tang-RoseChild/redis-admin/backend/utils/uredis"
 
 	"gopkg.in/redis.v5"
 )
@@ -123,7 +124,7 @@ func splitKey(key string) []string {
 }
 
 type RedisCmd struct {
-	Cmd  string
-	Key  string
-	Args []interface{}
+	Cmd  string        `json:"cmd"`
+	Key  string        `json:"key"`
+	Args []interface{} `json:"args"`
 }

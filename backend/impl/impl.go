@@ -3,8 +3,13 @@ package impl
 import (
 	"fmt"
 	"log"
-	"redis_backend/domain"
-	"redis_backend/utils/uredis"
+
+	"github.com/Tang-RoseChild/redis-admin/backend/domain"
+	"github.com/Tang-RoseChild/redis-admin/backend/utils/uredis"
+
+	"strconv"
+
+	"github.com/Tang-RoseChild/redis-admin/backend/utils"
 
 	"gopkg.in/redis.v5"
 )
@@ -29,15 +34,16 @@ func (s *impl) GetAllKeys() (root *domain.Node) {
 func (s *impl) ExecCmd(req *domain.RedisCmd) (root *domain.Node, info interface{}) {
 	switch req.Cmd {
 	case "select":
-	// modify db
+		// modify db
+		db, err := strconv.Atoi(req.Key)
+		if err != nil {
+			panic(err)
+		}
+
+		domain.DomainStore.UpdateConfig(&domain.RedisConfig{DB: utils.PInt(db)})
+		root = getRootNode("*")
 	case "keys":
-		root = &domain.Node{
-			DisplayName: "all keys",
-		}
-		redisKeys := domain.DomainStore.Search(req.Key)
-		for _, k := range redisKeys {
-			domain.AddKeyToNode(root, k)
-		}
+		getRootNode(req.Key)
 	default:
 		// just return simple info
 		cmd := redis.NewCmd(formatRedisCmdAsArgs(req)...)
@@ -48,13 +54,25 @@ func (s *impl) ExecCmd(req *domain.RedisCmd) (root *domain.Node, info interface{
 	return
 }
 
+func getRootNode(keyPatern string) *domain.Node {
+	root := &domain.Node{
+		DisplayName: "all keys",
+	}
+	redisKeys := domain.DomainStore.Search(keyPatern)
+	for _, k := range redisKeys {
+		domain.AddKeyToNode(root, k)
+	}
+
+	return root
+}
+
 func formatRedisCmdAsArgs(cmd *domain.RedisCmd) (dst []interface{}) {
 	dst = append(dst, cmd.Cmd, cmd.Key)
 	dst = append(dst, cmd.Args...)
 	return
 }
 
-func (s *impl) Modify(req domain.RedisConfig) {
+func (s *impl) Modify(req *domain.RedisConfig) {
 	domain.DomainStore.UpdateConfig(req)
 }
 

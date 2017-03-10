@@ -60,7 +60,7 @@ module.exports = {
         target: 'http://127.0.0.1:9092',
         changeOrigin: true,
         pathRewrite: {
-          '^/del': '/del'
+          '^/modify': '/modify'
         }
       }
     },

@@ -75,7 +75,7 @@ message RedisConfig {
     string url = 1;
     uint32 db = 2;
     uint32 timeout = 3;
-    repeated string separator = 4;
+    repeated string seperator = 4;
     string password = 5;
 }
 
@@ -86,9 +86,9 @@ message RedisConfigModifyResp {}
 
 message GetConfigReq {}
 message GetConfigResp {
-    RedisConfig resp = 1;
+    RedisConfig config = 1;
 }
 service ConfigService {
     rpc Modify(RedisConfigModifyReq) return (RedisConfigModifyResp);
-    rpc GetConfig(GetConfigReq) return (GetAllKeysResp);
+    rpc GetConfig(GetConfigReq) return (GetAllGetConfigResp);
 }
