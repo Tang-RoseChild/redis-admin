@@ -43,7 +43,7 @@ func (s *impl) ExecCmd(req *domain.RedisCmd) (root *domain.Node, info interface{
 		domain.DomainStore.UpdateConfig(&domain.RedisConfig{DB: utils.PInt(db)})
 		root = getRootNode("*")
 	case "keys":
-		getRootNode(req.Key)
+		root = getRootNode(req.Key)
 	default:
 		// just return simple info
 		cmd := redis.NewCmd(formatRedisCmdAsArgs(req)...)

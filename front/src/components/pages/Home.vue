@@ -173,7 +173,7 @@ export default {
                 if (node.parent.children[i].displayName === displayName) {
                   node.parent.children.splice(i, 1)
 
-                  if (node.parent.children.length === 0) {
+                  if (node.parent.children.length === 0 && node.parent.parent) {
                     removeNode(node.parent, node.parent.displayName)
                   }
                 }
