@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	
 
 	"github.com/Tang-RoseChild/redis-admin/backend/domain"
 	"github.com/Tang-RoseChild/redis-admin/backend/usercase"
@@ -16,6 +17,9 @@ func main() {
 		Timeout:   utils.PInt(5),
 		Seperator: utils.PString(":"),
 	})
+
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/", fs)
 
 	// TODO: reflect to inject handler
 	http.HandleFunc("/all", usercase.Handler.GetAllKeys)

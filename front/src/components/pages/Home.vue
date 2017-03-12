@@ -224,7 +224,11 @@ export default {
       })
     },
     fetchData () {
-      let loadingInstance = Loading.service({ body: true })
+      let loadingInstance = Loading.service({ body: this.loading })
+      setTimeout(() => {
+        loadingInstance.close()
+      }, 3000)
+
       let _this = this
       _this.$http.get('/all').then(resp => {
         console.log('resp in fetchData ....  ', resp.body)
@@ -258,15 +262,6 @@ export default {
       } else {
         this.tableData = [node]
       }
-    },
-    valueColumnIf (row) {
-      // console.log('tableValueIf ... ', row, ' row type ... ', row.type)
-      if (row.data) {
-        if (row.type === 'string' && row.data && row.data.length) {
-          return true
-        }
-      }
-      return false
     },
     dialogClose () {
       console.log('dialogClose ..... ')
