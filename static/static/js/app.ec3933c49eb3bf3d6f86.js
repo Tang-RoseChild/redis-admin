@@ -322,7 +322,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     modify(idx, ope, newVal) {
-      if (!this.detailDialogVisible) {
+      if (!this.detailDialogVisible || !newVal) {
         return;
       }
       const RENAME_FIELD = 1;
@@ -333,6 +333,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (ope === RENAME_FIELD) {
         req.oldField = redisKey.values[idx].field;
         req.field = newVal;
+        req.value = redisKey.values[idx].score;
       } else if (ope === MODIFY_VALUE) {
         if (redisKey.values[idx].field) {
           req.field = redisKey.values[idx].field;
@@ -342,14 +343,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       } else {
         return;
       }
-
+      // console.log('modify req > ', req)
       let _this = this;
       _this.$http.post('/modify', req).then(resp => {
         if (resp.error) {
           console.log('err', resp.error);
           _this.$message({ message: resp.error, type: 'error' });
         } else {
-          _this.$message({ message: 'updated', type: 'info' });
+          // _this.$message({message: 'updated', type: 'info'})
           if (ope === RENAME_FIELD) {
             redisKey.values[idx].field = newVal;
           } else if (ope === MODIFY_VALUE) {
@@ -960,4 +961,4 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 /***/ })
 
 },[82]);
-//# sourceMappingURL=app.1afdcc2729fd4cfa0ffe.js.map
+//# sourceMappingURL=app.ec3933c49eb3bf3d6f86.js.map
