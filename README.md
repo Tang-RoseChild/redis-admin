@@ -17,11 +17,16 @@ via wget
 
 默认端口号9092.再浏览器中输入localhost:9092即可
 
+# 示例
+![](https://github.com/Tang-RoseChild/redis-admin/blob/master/images/home.png)
+![](https://github.com/Tang-RoseChild/redis-admin/blob/master/images/peizhi.png)
+![](https://github.com/Tang-RoseChild/redis-admin/blob/master/images/xiugai.png)
+![](https://github.com/Tang-RoseChild/redis-admin/blob/master/images/cmd.gif)
 #目录结构
-backend:golang代码
-front:前端界面代码
-install.sh源代码安装脚本
-static:front编译后的dist文件夹
+backend:golang代码  
+front:前端界面代码  
+install.sh源代码安装脚本  
+static:front编译后的dist文件夹  
 
 ## TODO
 * 添加类似kibana的控制台
