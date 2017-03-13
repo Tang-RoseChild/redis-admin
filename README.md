@@ -6,7 +6,7 @@ golang + vue + elementui 实现简单的redis后台管理
 
 # 使用方法
 clone下来后，直接运行目录中的可执行文件。
-也可源代码安装(但不太推荐，目前对前端不熟练，尤其是nmp,webpace之类的，碰到坑的话，那就下去看看吧):
+也可源代码安装(但不太推荐，目前对前端不熟练，尤其是npm,webpace之类的，碰到坑的话，那就下去看看吧):
 
 via curl
 > sh -c "$(curl -fsSL https://raw.githubusercontent.com/Tang-RoseChild/redis-admin/master/install.sh)"
